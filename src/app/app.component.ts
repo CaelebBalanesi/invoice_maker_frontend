@@ -7,6 +7,7 @@ import { InvoiceService } from './invoice.service';
 interface Bill {
   description: string;
   amount: number;
+  extraParagraphs: string[];
 }
 
 interface Invoice {
@@ -46,17 +47,29 @@ export class AppComponent {
     invoiceNumber: '',
     date: '',
     invoiceeName: '',
-    bills: [{ description: '', amount: 0 }]
+    bills: [{ description: '', amount: 0, extraParagraphs: [''] }]
   };
 
   constructor(private invoiceService: InvoiceService) {}
 
   addBill(): void {
-    this.invoice.bills.push({ description: '', amount: 0 });
+    this.invoice.bills.push({ description: '', amount: 0, extraParagraphs: [''] });
   }
 
   removeBill(index: number): void {
     this.invoice.bills.splice(index, 1);
+  }
+
+  addParagraph(billIndex: number): void {
+    this.invoice.bills[billIndex].extraParagraphs.push('');
+  }
+
+  removeParagraph(billIndex: number, paragraphIndex: number): void {
+    this.invoice.bills[billIndex].extraParagraphs.splice(paragraphIndex, 1);
+  }
+
+  trackByIndex(index: number, item: any): any {
+    return index;
   }
 
   onSubmit(form: NgForm): void {
@@ -75,7 +88,8 @@ export class AppComponent {
         invoice_date: this.invoice.date,
         bills: this.invoice.bills.map(bill => ({
           description: bill.description,
-          amount: bill.amount
+          amount: bill.amount,
+          extra_paragraphs: bill.extraParagraphs
         }))
       };
 

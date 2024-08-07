@@ -61,7 +61,12 @@
       <div *ngFor="let bill of invoice.bills; let i = index" class="bill-group">
         <input type="text" placeholder="Bill Description" [(ngModel)]="bill.description" name="billDescription{{i}}" required>
         <input type="number" placeholder="Amount" [(ngModel)]="bill.amount" name="billAmount{{i}}" required>
-        <button type="button" (click)="removeBill(i)">Remove</button>
+        <div *ngFor="let paragraph of bill.extraParagraphs; let j = index; trackBy: trackByIndex">
+          <textarea placeholder="Extra Paragraph" [(ngModel)]="bill.extraParagraphs[j]" name="billExtraParagraph{{i}}{{j}}"></textarea>
+          <button type="button" (click)="removeParagraph(i, j)">Remove Paragraph</button>
+        </div>
+        <button type="button" (click)="addParagraph(i)">Add Paragraph</button>
+        <button type="button" (click)="removeBill(i)">Remove Bill</button>
       </div>
       <button type="button" (click)="addBill()">Add Bill</button>
     </div>
